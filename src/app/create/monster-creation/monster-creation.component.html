@@ -1,0 +1,443 @@
+<br>
+<br>
+<div class="d-flex justify-content-center">
+  <button *ngFor="let header of wizardHeader;index as i" [ngClass]="{'activeHeader black': wizardPosition == i}"
+    id="{{i}}" class="btn vote" (click)="setWizardPosition(i)">{{header}}</button>
+</div>
+<br>
+<div class="row">
+  <div class="col-sm stattext text">
+    <a *ngIf="wizardPosition == 0" class="btn vote black" href="/listing/all"><i class="fas fa-backward"></i>
+      Exit</a>
+    <button *ngIf="wizardPosition > 0" class="btn vote" (click)="back()"><i class="fas fa-backward"></i> Back</button>
+    <button *ngIf="wizardPosition < wizardPages" class="btn vote" (click)="next()"><i class="fas fa-forward"></i>
+      Next</button>
+    <button [disabled]="form.invalid" *ngIf="wizardPosition == wizardPages" class="btn vote black float-right"
+      (click)="create()"><i class="fas fa-dragon"></i>
+      <span *ngIf="!isEditMode">Create</span>
+      <span *ngIf="isEditMode">Update</span>
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm stattext titletext name float-center">
+    {{wizardHeader[wizardPosition]}}
+  </div>
+</div>
+<br>
+<form [formGroup]="form">
+  <div class="monster-description" *ngIf="wizardPosition == 0">
+    <br>
+    <div class="row">
+      <div class="col-sm">
+        <div class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Name </b><b><input maxlength="100" class="form-control" type="text"
+                formControlName="name"></b>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Image URL </b><b><input maxlength="100" class="form-control" type="text"
+                formControlName="imageUrl"></b>
+          </div>
+        </div>
+        <hr class="description-divider">
+        <div class="row">
+          <div class="col-sm stattext text form-group">
+            <b class="stattitle">Description </b>
+            <p class="description-text form-group"><textarea maxlength="2400" class="form-control" type="text" rows="5"
+                formControlName="description"></textarea></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="monster-background">
+    <br>
+    <div class="row">
+      <div class="col-sm">
+        <div *ngIf="wizardPosition == 0">
+          <div class="row">
+            <div class="col-sm infotext form-group">
+              <b class="stattitle">Size </b>
+              <select class="form-control" formControlName="size">
+                <option *ngFor="let size of sizes">{{size}}</option>
+              </select>
+            </div>
+            <div class="col-sm infotext form-group">
+              <b class="stattitle">Type </b>
+              <select class="form-control" formControlName="type">
+                <option *ngFor="let type of types">{{type}}</option>
+              </select>
+            </div>
+            <div class="col-sm infotext form-group">
+              <b class="stattitle">Alignment </b>
+              <select class="form-control" formControlName="alignment">
+                <option *ngFor="let alignment of alignments">{{alignment}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm stattext text form-group">
+              <b class="stattitle">Challenge</b> <input type="number" min="0" max="40" formControlName="cr"
+                class="form-control">
+            </div>
+            <div class="col-sm stattext text form-group">
+              <b class="stattitle">XP</b> <input type="number" formControlName="xp" class="form-control">
+            </div>
+          </div>
+          <form [formGroup]="languageForm">
+            <div class="row form-group">
+              <div class="col-sm stattext text">
+                <b class="stattitle">Languages </b>
+                <input type="text" class="form-control" formControlName="language">
+              </div>
+              <div class="col-sm stattext text">
+                <br>
+                <button class="btn vote" [disabled]="languageForm.invalid" (click)="addLanguage()"><i
+                    class="fas fa-plus"></i></button>
+              </div>
+            </div>
+          </form>
+          <div class="row">
+            <div class="col-sm stattext text">
+              <span *ngFor="let language of form.controls.languages.value;let i = index"
+                class="badge text badge-dnd">{{language}} <button class="btn vote" (click)="removeLanguage(i)"><i
+                    class="fas fa-minus"></i></button></span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="wizardPosition == 1">
+          <div class="row">
+            <div class="col-sm stattext text form-group">
+              <b class="stattitle">Armor Class</b> <input min="0" max="25" type="number" formControlName="ac"
+                class="form-control">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm stattext text form-group">
+              <b class="stattitle">Hit Points</b> <input min="1" max="1000" type="number" formControlName="hp"
+                class="form-control">
+            </div>
+            <div class="col-sm stattext text form-group">
+              <b class="stattitle">Hit Dice</b> <input min="1" max="40" type="number" formControlName="hitdice"
+                class="form-control">
+            </div>
+            <div class="col-sm stattext text form-group">
+              <b class="stattitle">Hit Die</b> <input min="1" max="20" type="number" formControlName="hitdie"
+                class="form-control">
+            </div>
+            <div class="col-sm stattext text form-group">
+              <b class="stattitle">Bonus Hp</b> <input min="0" max="1000" type="number" formControlName="bonusHp"
+                class="form-control">
+            </div>
+          </div>
+          <form [formGroup]="movementForm">
+            <div class="row form-group">
+              <div class="col-sm stattext text">
+                <b class="stattitle">Speed </b><input min="5" max="1000" type="number" formControlName="speed"
+                  class="form-control">
+              </div>
+              <div class="col-sm stattext text">
+                <b class="stattitle">Movement Type </b><select class="form-control" formControlName="movementType">
+                  <option *ngFor="let movementType of getFilteredMovementList()">{{movementType}}</option>
+                </select>
+              </div>
+              <div class="col-sm stattext text">
+                <br>
+                <button class="btn vote" (click)="addMovement()"><i class="fas fa-plus"></i></button>
+              </div>
+            </div>
+          </form>
+          <div class="row">
+            <div class="col-sm stattext text">
+              <span *ngFor="let movement of form.controls.movements.value;let i = index"
+                class="badge text badge-dnd">{{movement.type}} {{movement.amount}}ft <button class="btn vote"
+                  (click)="removeMovement(i)"><i class="fas fa-minus"></i></button></span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="wizardPosition == 2">
+          <div class="row">
+            <div class="col-sm stattext text">
+              <b class="stattitle">STR</b><br>
+              <input type="number" min="0" max="40" formControlName="str" class="form-control">
+              ({{getBonus(form.controls.str.value)}})
+            </div>
+            <div class="col-sm stattext text">
+              <b class="stattitle">DEX</b><br>
+              <input type="number" min="0" max="40" formControlName="dex" class="form-control">
+              ({{getBonus(form.controls.dex.value)}})
+            </div>
+            <div class="col-sm stattext text">
+              <b class="stattitle">CON</b><br>
+              <input type="number" min="0" max="40" formControlName="con" class="form-control">
+              ({{getBonus(form.controls.con.value)}})
+            </div>
+            <div class="col-sm stattext text">
+              <b class="stattitle">INT</b><br>
+              <input type="number" min="0" max="40" formControlName="int" class="form-control">
+              ({{getBonus(form.controls.int.value)}})
+            </div>
+            <div class="col-sm stattext text">
+              <b class="stattitle">WIS</b><br>
+              <input type="number" min="0" max="40" formControlName="wis" class="form-control">
+              ({{getBonus(form.controls.wis.value)}})
+            </div>
+            <div class="col-sm stattext text">
+              <b class="stattitle">CHA</b><br>
+              <input type="number" min="0" max="40" formControlName="cha" class="form-control">
+              ({{getBonus(form.controls.cha.value)}})
+            </div>
+          </div>
+          <br>
+          <form [formGroup]="savingThrowForm">
+            <div class="row form-group">
+              <div class="col-sm stattext text">
+                <b class="stattitle">Saving Throws </b><select class="form-control" formControlName="savingThrow">
+                  <option *ngFor="let savingThrow of savingThrows">{{savingThrow}}</option>
+                </select>
+              </div>
+              <div class="col-sm stattext text">
+                <b class="stattitle">Bonus </b><input type="number" min="-40" max="40"
+                  formControlName="savingThrowBonus" class="form-control">
+              </div>
+              <div class="col-sm stattext text">
+                <br>
+                <button class="btn vote" [disabled]="savingThrowForm.invalid" (click)="addSavingThrow()"><i
+                    class="fas fa-plus"></i></button>
+              </div>
+            </div>
+          </form>
+          <div class="row">
+            <div class="col-sm stattext text">
+              <span *ngFor="let savingThrow of form.controls.savingThrows.value;let i = index"
+                class="badge text badge-dnd">{{getBonusSign(savingThrow.amount)}} {{savingThrow.type}} <button
+                  class="btn vote" (click)="removeSavingThrow(i)"><i class="fas fa-minus"></i></button></span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="wizardPosition == 3">
+          <form [formGroup]="skillForm">
+            <div class="row form-group">
+              <div class="col-sm stattext text">
+                <b class="stattitle">Skill </b><select class="form-control" formControlName="skill">
+                  <option *ngFor="let skill of getFilteredSkillsList()">{{skill}}</option>
+                </select>
+              </div>
+              <div class="col-sm stattext text">
+                <b class="stattitle">Bonus </b><input type="number" min="-40" max="40" formControlName="skillBonus"
+                  class="form-control">
+              </div>
+              <div class="col-sm stattext text">
+                <br>
+                <button class="btn vote" [disabled]="skillForm.invalid" (click)="addSkill()"><i
+                    class="fas fa-plus"></i></button>
+              </div>
+            </div>
+          </form>
+          <div class="row">
+            <div class="col-sm stattext text">
+              <span *ngFor="let skillcheck of form.controls.skills.value;let i = index"
+                class="badge text badge-dnd">{{getBonusSign(skillcheck.bonus)}} {{skillcheck.skill}} <button
+                  class="btn vote" (click)="removeSkill(i)"><i class="fas fa-minus"></i></button></span>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-sm stattext text">
+              <b class="stattitle">Damage Vulnerability </b><select class="form-control"
+                formControlName="damageVulnerability">
+                <option *ngFor="let damageVulnerability of getFilteredDamageVulnerabilitiesList()">
+                  {{damageVulnerability}}
+                </option>
+              </select>
+            </div>
+            <div class="col-sm stattext text">
+              <br>
+              <button class="btn vote" (click)="addDamageVulnerability()"><i class="fas fa-plus"></i></button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm stattext text">
+              <span *ngFor="let vulnerability of form.controls.vulnerabilities.value;let i = index"
+                class="badge text badge-dnd">{{vulnerability}} <button class="btn vote"
+                  (click)="removeDamageVulnerability(i)"><i class="fas fa-minus"></i></button></span>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-sm stattext text">
+              <b class="stattitle">Damage Resistance </b><select class="form-control"
+                formControlName="damageResistance">
+                <option *ngFor="let damageResistance of getFilteredDamageResistancesList()">{{damageResistance}}
+                </option>
+              </select>
+            </div>
+            <div class="col-sm stattext text">
+              <br>
+              <button class="btn vote" (click)="addDamageResistance()"><i class="fas fa-plus"></i></button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm stattext text">
+              <span *ngFor="let resistance of form.controls.resistances.value;let i = index"
+                class="badge text badge-dnd">{{resistance.type}} <button class="btn vote"
+                  (click)="removeDamageResistance(i)"><i class="fas fa-minus"></i></button></span>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-sm stattext text">
+              <b class="stattitle">Damage Immunity </b><select class="form-control" formControlName="damageImmunity">
+                <option *ngFor="let damageImmunity of getFilteredDamageImmunitiesList()">{{damageImmunity}}
+                </option>
+              </select>
+            </div>
+            <div class="col-sm stattext text">
+              <br>
+              <button class="btn vote" (click)="addDamageImmunity()"><i class="fas fa-plus"></i></button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm stattext text">
+              <span *ngFor="let immunity of form.controls.damageImmunities.value;let i = index"
+                class="badge text badge-dnd">{{immunity.name}} <button class="btn vote"
+                  (click)="removeDamageImmunity(i)"><i class="fas fa-minus"></i></button></span>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col-sm stattext text">
+              <b class="stattitle">Condition Immunity </b><select class="form-control"
+                formControlName="conditionImmunity">
+                <option *ngFor="let conditionImmunity of getFilteredConditionImmunitiesList()">{{conditionImmunity}}
+                </option>
+              </select>
+            </div>
+            <div class="col-sm stattext text">
+              <br>
+              <button class="btn vote" (click)="addConditionImmunity()"><i class="fas fa-plus"></i></button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm stattext text">
+              <span *ngFor="let immunity of form.controls.conditionImmunities.value;let i = index"
+                class="badge text badge-dnd">{{immunity.name}} <button class="btn vote"
+                  (click)="removeConditionImmunity(i)"><i class="fas fa-minus"></i></button></span>
+            </div>
+          </div>
+          <form [formGroup]="senseForm">
+            <div class="row form-group">
+              <div class="col-sm stattext text">
+                <b class="stattitle">Senses </b><select class="form-control" formControlName="type">
+                  <option *ngFor="let sense of getFilteredSensesList()">{{sense}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-sm stattext text">
+                <b class="stattitle">Range </b><input type="number" min="5" max="1000" formControlName="range"
+                  class="form-control">
+              </div>
+              <div class="col-sm stattext text">
+                <br>
+                <button class="btn vote" [disabled]="senseForm.invalid" (click)="addSense()"><i
+                    class="fas fa-plus"></i></button>
+              </div>
+            </div>
+          </form>
+          <div class="row">
+            <div class="col-sm stattext text">
+              <span *ngFor="let sense of form.controls.senses.value;let i = index"
+                class="badge text badge-dnd">{{sense.type}} {{sense.range}}ft.
+                <button class="btn vote" (click)="removeSense(i)"><i class="fas fa-minus"></i></button></span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="wizardPosition == 4">
+          <form [formGroup]="abilityForm">
+            <div class="row form-group">
+              <div class="col-sm stattext text">
+                <b class="stattitle">Add Ability </b><select class="form-control" formControlName="ability">
+                  <option *ngFor="let type of abilityTypes">{{type}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-sm stattext text form-group">
+                <b class="stattitle">Name</b> <input type="text" formControlName="abilityName" class="form-control">
+              </div>
+              <div class="col-sm stattext text">
+                <br>
+                <button class="btn vote" [disabled]="abilityForm.invalid" (click)="addAbility()"><i
+                    class="fas fa-plus"></i></button>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-sm stattext text form-group">
+                <b class="stattitle">Description</b> <textarea class="form-control" type="text" rows="5"
+                  formControlName="abilityDescription"></textarea>
+              </div>
+            </div>
+            <div *ngIf="hasActions()">
+              <hr class="smallhr">
+              <div class="row ability" *ngFor="let ability of getFilteredAbilities(abilityTypes[0])">
+                <div class="col-sm">
+                  <b class="infotext">{{ability.name}}. </b> <span class="ability-text">{{ability.description}}</span>
+                  <br><br><button class="btn vote" (click)="removeAbility(ability.name)"><i
+                      class="fas fa-minus"></i></button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="hasAbilities()">
+              <div class="row">
+                <div class="col-sm stattext text name">
+                  <b>ABILITIES</b>
+                </div>
+              </div>
+              <hr class="smallhr">
+              <div class="row ability" *ngFor="let ability of getFilteredAbilities(abilityTypes[3])">
+                <div class="col-sm">
+                  <b class="infotext">{{ability.name}}. </b> <span class="ability-text">{{ability.description}}</span>
+                  <br><br><button class="btn vote" (click)="removeAbility(ability.name)"><i
+                      class="fas fa-minus"></i></button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="hasReactions()">
+              <div class="row">
+                <div class="col-sm stattext text name">
+                  <b>REACTIONS</b>
+                </div>
+              </div>
+              <hr class="smallhr">
+              <div class="row ability" *ngFor="let ability of getFilteredAbilities(abilityTypes[2])">
+                <div class="col-sm">
+                  <b class="infotext">{{ability.name}}. </b> <span class="ability-text">{{ability.description}}</span>
+                  <br><br><button class="btn vote" (click)="removeAbility(ability.name)"><i
+                      class="fas fa-minus"></i></button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="hasLegendaryActions()">
+              <div class="row">
+                <div class="col-sm stattext text name">
+                  <b>LEGENDARY ACTIONS</b>
+                </div>
+              </div>
+              <hr class="smallhr">
+              <div class="row">
+              </div>
+              <div class="row ability" *ngFor="let ability of getFilteredAbilities(abilityTypes[1])">
+                <div class="col-sm">
+                  <b class="infotext">{{ability.name}}. </b> <span class="ability-text">{{ability.description}}</span>
+                  <br><br><button class="btn vote" (click)="removeAbility(ability.name)"><i
+                      class="fas fa-minus"></i></button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <br>
+  </div>
+</form>
+<br>
+<br>

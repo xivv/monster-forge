@@ -1,0 +1,20 @@
+<br>
+<br>
+<div class="d-flex justify-content-center">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="card bg-dark">
+      <div class="card-body">
+        <div class="d-flex flex-column">
+          <div class="p-2"> <input class="input is-large" autocomplete="on" formControlName="email" type="email"
+              placeholder="E-Mail" autofocus=""></div>
+          <div class="p-2"><input class="input is-large" autocomplete="on" formControlName="password" type="password"
+              placeholder="Passwort (6 Characters)"></div>
+          <div class="p-2"><input class="input is-large" autocomplete="on" formControlName="repeatPassword"
+              type="password" placeholder="Repeat passwort"></div>
+          <div class="p-2"> <button class="btn vote" [disabled]="registerForm.invalid" type="submit">Register</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

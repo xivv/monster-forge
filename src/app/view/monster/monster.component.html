@@ -1,0 +1,210 @@
+<br>
+<br>
+<div *ngIf="monster">
+  <div class="monster-description">
+    <div class="row">
+      <div class="col-sm">
+        <div class="row">
+          <div class="col-sm stattext titletext name">
+            <b>{{monster.name | uppercase}} </b>
+            <a href="/profile/{{monster.userid}}"><i class="fas fa-user-circle"></i></a><br>
+            <button [disabled]="!(authService.user | async)" class="vote" *ngIf="!alreadyVoted()" (click)="upvote()"><i
+                class="fas fa-thumbs-up"></i></button>
+            <button [disabled]="!(authService.user | async)" class="vote" *ngIf="alreadyVoted()" (click)="downvote()"><i
+                class="fas fa-thumbs-down"></i></button>
+            <button *ngIf="isOwner(monster)" class="vote" routerLink="/monster/{{monster.id}}/edit"><i
+                class="fas fa-edit"></i> Edit</button>
+            <button *ngIf="isOwner(monster)" class="vote" (click)="delete(monster)"><i class="fas fa-trash"></i>
+              Delete</button>
+          </div>
+        </div>
+        <hr class="description-divider">
+        <div class="row">
+          <div class="col-sm">
+            <p class="description-text">{{monster.description}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <img class="image mx-auto rounded d-block img-fluid" src="{{monster.imageUrl}}">
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="monster-background">
+    <div class="row">
+      <div class="col-sm">
+        <div class="row">
+          <div class="col-sm stattext text name">
+            <b>{{monster.name | uppercase}}</b>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm infotext">
+            {{sizes[monster.size] | titlecase}} {{types[monster.type] | lowercase}}, {{alignments[monster.alignment]}}
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Armor Class</b> {{monster.defenses.ac}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Hit Points</b> {{monster.defenses.hp}}
+            ({{monster.defenses.hitdice}}d{{monster.defenses.hitdie}} +
+            {{monster.defenses.bonusHp}})
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Speed </b>
+            <span *ngFor="let movement of monster.offenses.movements">{{movements[movement.type]}} {{movement.amount}}
+              ft., </span>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">STR</b><br>
+            {{monster.statistics.str}} ({{getBonus(monster.statistics.str)}})
+          </div>
+          <div class="col-sm stattext text">
+            <b class="stattitle">DEX</b><br>
+            {{monster.statistics.dex}} ({{getBonus(monster.statistics.dex)}})
+          </div>
+          <div class="col-sm stattext text">
+            <b class="stattitle">CON</b><br>
+            {{monster.statistics.con}} ({{getBonus(monster.statistics.con)}})
+          </div>
+          <div class="col-sm stattext text">
+            <b class="stattitle">INT</b><br>
+            {{monster.statistics.int}} ({{getBonus(monster.statistics.int)}})
+          </div>
+          <div class="col-sm stattext text">
+            <b class="stattitle">WIS</b><br>
+            {{monster.statistics.wis}} ({{getBonus(monster.statistics.wis)}})
+          </div>
+          <div class="col-sm stattext text">
+            <b class="stattitle">CHA</b><br>
+            {{monster.statistics.cha}} ({{getBonus(monster.statistics.cha)}})
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Saving Throws</b> Dex +6, Con +7
+          </div>
+        </div>
+        <div *ngIf="monster.statistics.skills.length > 0" class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Skills </b>
+            <span *ngFor="let skillCheck of monster.statistics.skills">{{skills[skillCheck.skill]}}
+              +{{skillCheck.bonus}},
+            </span>
+          </div>
+        </div>
+        <div *ngIf="monster.defenses.vulnerabilities.length > 0" class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Damage Vulnerabilities </b>
+            <span *ngFor="let weakness of monster.defenses.vulnerabilities">{{damageTypes[weakness]}},
+            </span>
+          </div>
+        </div>
+        <div *ngIf="monster.defenses.resistances.length > 0" class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Damage Resistances </b>
+            <span *ngFor="let resistance of monster.defenses.resistances">{{damageTypes[resistance.type]}},
+            </span>
+          </div>
+        </div>
+        <div *ngIf="getFilteredImmunities(immunityTypes.DAMAGE).length > 0" class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Damage Immunities </b>
+            <span *ngFor="let immunity of getFilteredImmunities(immunityTypes.DAMAGE)">{{damageTypes[immunity.name]}},
+            </span>
+          </div>
+        </div>
+        <div *ngIf="getFilteredImmunities(immunityTypes.CONDITION).length > 0" class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Condition Immunities </b>
+            <span *ngFor="let immunity of getFilteredImmunities(immunityTypes.CONDITION)">{{conditions[immunity.name]}},
+            </span>
+          </div>
+        </div>
+        <div *ngIf="monster.senses.length > 0" class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Senses </b>
+            <span *ngFor="let sense of monster.senses">{{senses[sense.type]}} {{sense.range}}ft., </span>
+          </div>
+        </div>
+        <div *ngIf="monster.statistics.languages.length > 0" class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Languages </b>
+            <span *ngFor="let language of monster.statistics.languages">{{language | titlecase}}, </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm stattext text">
+            <b class="stattitle">Challenge</b> {{monster.cr}} ({{monster.xp | number: '2.'}} XP)
+          </div>
+        </div>
+        <hr>
+        <div class="row ability" *ngFor="let ability of getFilteredAbilities(abilityTypes.ABILITY)">
+          <div class="col-sm">
+            <b class="infotext">{{ability.name}}. </b> <span class="ability-text">{{ability.description}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div *ngIf="hasActions()">
+          <div class="row">
+            <div class="col-sm stattext text name">
+              <b>ACTIONS</b>
+            </div>
+          </div>
+          <hr class="smallhr">
+          <div class="row ability" *ngFor="let ability of getFilteredAbilities(abilityTypes.ACTION)">
+            <div class="col-sm">
+              <b class="infotext">{{ability.name}}. </b> <span class="ability-text">{{ability.description}}</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="hasReactions()">
+          <div class="row">
+            <div class="col-sm stattext text name">
+              <b>REACTIONS</b>
+            </div>
+          </div>
+          <hr class="smallhr">
+          <div class="row ability" *ngFor="let ability of getFilteredAbilities(abilityTypes.REACTION)">
+            <div class="col-sm">
+              <b class="infotext">{{ability.name}}. </b> <span class="ability-text">{{ability.description}}</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="hasLegendaryActions()">
+          <div class="row">
+            <div class="col-sm stattext text name">
+              <b>LEGENDARY ACTIONS</b>
+            </div>
+          </div>
+          <hr class="smallhr">
+          <div class="row">
+            <div class="col-sm text">
+              {{monster.statistics.legendaryDescription}}
+            </div>
+          </div>
+          <div class="row ability" *ngFor="let ability of getFilteredAbilities(abilityTypes.LEGENDARY_ACTION)">
+            <div class="col-sm">
+              <b class="infotext">{{ability.name}}. </b> <span class="ability-text">{{ability.description}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<br>
