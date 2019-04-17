@@ -1,0 +1,68 @@
+<br>
+<br>
+<div class="stattext wizardtitle titletext name float-center"
+  *ngIf="(compendiumService.userCompendiums | async )?.length >= maxCompendiums">
+  You have reached the limit of {{maxCompendiums}} compendiums. Please wait until the site evolves a bit more :)
+</div>
+<div *ngIf="(compendiumService.userCompendiums | async )?.length < maxCompendiums">
+  <div class="row">
+    <div class="col-sm stattext text">
+      <a *ngIf="wizardPosition == 0" class="btn vote black" href="/listing/compendium/all"><i
+          class="fas fa-backward"></i>
+        Exit</a>
+      <button *ngIf="wizardPosition > 0" class="btn vote" (click)="back()"><i class="fas fa-backward"></i> Back</button>
+      <button *ngIf="wizardPosition < wizardPages" class="btn vote" (click)="next()"><i class="fas fa-forward"></i>
+        Next</button>
+      <button [disabled]="form.invalid" class="btn vote black float-right" (click)="create()"><i
+          class="fas fa-plus"></i>
+        <span *ngIf="!isEditMode">Create</span>
+        <span *ngIf="isEditMode">Update</span>
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm stattext wizardtitle titletext name float-center">
+      {{wizardHeader[wizardPosition]}}
+    </div>
+  </div>
+  <br>
+  <form [formGroup]="form" *ngIf="wizardPosition === 0">
+    <div class="row">
+      <div class="col-sm">
+        <div class="monster-description">
+          <br>
+          <div class="row">
+            <div class="col-sm">
+              <div class="row">
+                <div class="col-sm stattext text">
+                  <b class="stattitle">Name </b><b><input maxlength="100" class="form-control" type="text"
+                      formControlName="name"></b>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm stattext text">
+                  <b class="stattitle">Image URL </b><b><input maxlength="100" class="form-control" type="text"
+                      formControlName="imageUrl"></b>
+                </div>
+              </div>
+              <hr class="description-divider">
+              <div class="row">
+                <div class="col-sm stattext text form-group">
+                  <b class="stattitle">Description </b>
+                  <p class="description-text form-group"><textarea maxlength="2400" class="form-control" type="text"
+                      rows="5" formControlName="description"></textarea></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="row" *ngIf="wizardPosition === 1">
+    <div class="col-sm">
+      <ng-multiselect-dropdown [data]="dropdownList" [(ngModel)]="selectedItems" [settings]="dropdownSettings">
+      </ng-multiselect-dropdown>
+    </div>
+  </div>
+</div>

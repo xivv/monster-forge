@@ -1,0 +1,34 @@
+<br>
+<br>
+<div *ngIf="compendium">
+  <div class="monster-description">
+    <div class="row">
+      <div class="col-sm">
+        <div class="row">
+          <div class="col-sm stattext titletext name">
+            <b>{{compendium.name | uppercase}} </b>
+            <a href="/profile/{{compendium.userid}}"><i class="fas fa-user-circle"></i></a><br>
+            <button [disabled]="!(authService.user | async)" class="vote" *ngIf="!alreadyVoted()" (click)="upvote()"><i
+                class="fas fa-thumbs-up"></i></button>
+            <button [disabled]="!(authService.user | async)" class="vote" *ngIf="alreadyVoted()" (click)="downvote()"><i
+                class="fas fa-thumbs-down"></i></button>
+            <a *ngIf="isOwner(compendium)" class="vote" href="/compendium/{{compendium.id}}/edit"><i
+                class="fas fa-edit"></i> Edit</a>
+            <button *ngIf="isOwner(compendium)" class="vote" (click)="delete(compendium)"><i class="fas fa-trash"></i>
+              Delete</button>
+          </div>
+        </div>
+        <hr class="description-divider">
+        <div class="row">
+          <div class="col-sm">
+            <p class="description-text">{{compendium.description}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm">
+        <img class="image mx-auto rounded d-block img-fluid" src="{{compendium.imageUrl}}">
+      </div>
+    </div>
+  </div>
+  <app-monster-listing [monsters]="monsters"></app-monster-listing>
+</div>

@@ -8,15 +8,22 @@ import { MonsterCreationComponent } from './create/monster-creation/monster-crea
 import { AuthguardService } from './auth/authguard.service';
 import { HomeComponent } from './layout/home/home.component';
 import { ProfileComponent } from './view/profile/profile.component';
+import { CreateCompendiumComponent } from './create/create-compendium/create-compendium.component';
+import { CompendiumListingComponent } from './view/compendium-listing/compendium-listing.component';
+import { CompendiumComponent } from './view/compendium/compendium.component';
 
 const routes: Routes = [
   { path: 'monster/:id', component: MonsterComponent },
   { path: 'monster/:id/edit', component: MonsterCreationComponent },
-  { path: 'listing/:list', component: MonsterListingComponent },
+  { path: 'compendium/:id', component: CompendiumComponent },
+  { path: 'compendium/:id/edit', component: CreateCompendiumComponent },
+  { path: 'listing/monster/:list', component: MonsterListingComponent },
+  { path: 'listing/compendium/:list', component: CompendiumListingComponent },
   { path: 'profile/:userid', component: ProfileComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'create', component: MonsterCreationComponent, canActivate: [AuthguardService] },
+  { path: 'create/monster', component: MonsterCreationComponent, canActivate: [AuthguardService] },
+  { path: 'create/compendium', component: CreateCompendiumComponent, canActivate: [AuthguardService] },
   { path: '', component: HomeComponent }
 ];
 

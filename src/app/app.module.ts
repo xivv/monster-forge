@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,12 +15,15 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment.prod';
 import { RegisterComponent } from './auth/register/register.component';
 import { RecaptchaModule } from 'ng-recaptcha';
-import { MyMonsterComponent } from './view/my-monster/my-monster.component';
 import { MonsterCreationComponent } from './create/monster-creation/monster-creation.component';
 import { HomeComponent } from './layout/home/home.component';
 
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { ProfileComponent } from './view/profile/profile.component';
+import { CreateCompendiumComponent } from './create/create-compendium/create-compendium.component';
+import { CompendiumListingComponent } from './view/compendium-listing/compendium-listing.component';
+import { CompendiumComponent } from './view/compendium/compendium.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [
@@ -31,20 +34,24 @@ import { ProfileComponent } from './view/profile/profile.component';
     FooterComponent,
     LoginComponent,
     RegisterComponent,
-    MyMonsterComponent,
     MonsterCreationComponent,
     HomeComponent,
-    ProfileComponent
+    ProfileComponent,
+    CreateCompendiumComponent,
+    CompendiumListingComponent,
+    CompendiumComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     AngularFireModule.initializeApp(environment.firebaseconfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
     RecaptchaModule,
-    Ng4LoadingSpinnerModule.forRoot()
+    Ng4LoadingSpinnerModule.forRoot(),
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

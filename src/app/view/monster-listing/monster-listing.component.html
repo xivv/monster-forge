@@ -1,42 +1,84 @@
-<br>
-<br>
-<div *ngIf="getList() | async as monsterList; else loading">
-  <div *ngIf="monsterList.length; else empty">
-    <ng-container *ngFor="let monster of monsterList">
-      <div class="listing-item monster-background">
-        <div class="row">
-          <div class="col-sm">
-            <div class="row">
-              <div class="col-sm">
-                <a class="stattext titletext name" routerLink="/monster/{{monster.id}}">{{monster.name}} </a>
-                <a href="/profile/{{monster.userid}}"><i class="fas fa-user-circle"></i></a>
-                <span><i class="fas fa-thumbs-up"></i> {{monster.upvotes.length}}</span><br>
-                <button *ngIf="isOwner(monster)" class="vote" routerLink="/monster/{{monster.id}}/edit"><i
-                    class="fas fa-edit"></i> Edit</button>
-                <button *ngIf="isOwner(monster)" class="vote" (click)="delete(monster)"><i class="fas fa-trash"></i>
-                  Delete</button>
+<div *ngIf="monsters == null">
+  <div *ngIf="getList() | async as monsterList; else loading">
+    <div *ngIf="monsterList.length; else empty">
+      <div class="row">
+        <ng-container *ngFor="let monster of monsterList">
+          <div class="listing-item monster-listing">
+            <div class="col-sm">
+              <div class="row">
+                <div class="col-sm">
+                  <a class="stattext titletext name" href="/monster/{{monster.id}}">{{monster.name}} </a>
+                  <a href="/profile/{{monster.userid}}"><i class="fas fa-user-circle"></i></a>
+                  <span><i class="fas fa-thumbs-up"></i> {{monster.upvotes.length}}</span><br>
+                  <a *ngIf="isOwner(monster)" class="vote" href="/monster/{{monster.id}}/edit"><i
+                      class="fas fa-edit"></i> Edit</a>
+                  <button *ngIf="isOwner(monster)" class="vote" (click)="delete(monster)"><i class="fas fa-trash"></i>
+                    Delete</button>
+                </div>
               </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-sm infotext">
-                {{sizes[monster.size] | titlecase}} {{types[monster.type] | lowercase}},
-                {{alignments[monster.alignment]}}
+              <hr>
+              <div class="row">
+                <div class="col-sm infotext">
+                  {{sizes[monster.size] | titlecase}} {{types[monster.type] | lowercase}},
+                  {{alignments[monster.alignment]}}
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-sm stattext text">
-                <b class="stattitle">Challenge</b> {{monster.cr}} ({{monster.xp | number: '2.'}} XP)
+              <div class="row">
+                <div class="col-sm stattext text">
+                  <b class="stattitle">Challenge</b> {{monster.cr}} ({{monster.xp | number: '2.'}} XP)
+                </div>
               </div>
+              <br>
             </div>
-            <br>
           </div>
-        </div>
+        </ng-container>
       </div>
-    </ng-container>
+    </div>
+    <ng-template #empty>No monster available...</ng-template>
   </div>
-  <ng-template #empty>No monster available...</ng-template>
+  <ng-template #loading>
+    Loading...
+  </ng-template>
 </div>
-<ng-template #loading>
-  Loading...
-</ng-template>
+<div *ngIf="monsters != null">
+  <div *ngIf="getList() as monsterList; else loading2">
+    <div *ngIf="monsterList.length; else empty">
+      <div class="row">
+        <ng-container *ngFor="let monster of monsterList">
+          <div class="listing-item monster-listing">
+            <div class="col-sm">
+              <div class="row">
+                <div class="col-sm">
+                  <a class="stattext titletext name" href="/monster/{{monster.id}}">{{monster.name}} </a>
+                  <a href="/profile/{{monster.userid}}"><i class="fas fa-user-circle"></i></a>
+                  <span><i class="fas fa-thumbs-up"></i> {{monster.upvotes.length}}</span><br>
+                  <a *ngIf="isOwner(monster)" class="vote" href="/monster/{{monster.id}}/edit"><i
+                      class="fas fa-edit"></i> Edit</a>
+                  <button *ngIf="isOwner(monster)" class="vote" (click)="delete(monster)"><i class="fas fa-trash"></i>
+                    Delete</button>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm infotext">
+                  {{sizes[monster.size] | titlecase}} {{types[monster.type] | lowercase}},
+                  {{alignments[monster.alignment]}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm stattext text">
+                  <b class="stattitle">Challenge</b> {{monster.cr}} ({{monster.xp | number: '2.'}} XP)
+                </div>
+              </div>
+              <br>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <ng-template #empty>No monster available...</ng-template>
+  </div>
+  <ng-template #loading2>
+    Loading...
+  </ng-template>
+</div>

@@ -12,8 +12,8 @@
                 class="fas fa-thumbs-up"></i></button>
             <button [disabled]="!(authService.user | async)" class="vote" *ngIf="alreadyVoted()" (click)="downvote()"><i
                 class="fas fa-thumbs-down"></i></button>
-            <button *ngIf="isOwner(monster)" class="vote" routerLink="/monster/{{monster.id}}/edit"><i
-                class="fas fa-edit"></i> Edit</button>
+            <a *ngIf="isOwner(monster)" class="vote" href="/monster/{{monster.id}}/edit"><i class="fas fa-edit"></i>
+              Edit</a>
             <button *ngIf="isOwner(monster)" class="vote" (click)="delete(monster)"><i class="fas fa-trash"></i>
               Delete</button>
           </div>

@@ -6,6 +6,7 @@ import { Size } from 'src/app/model/Size';
 import { Alignment } from 'src/app/model/Alignment';
 import { Type } from 'src/app/model/Type';
 import { AuthService } from 'src/app/auth/auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-monster-listing',
@@ -17,7 +18,7 @@ export class MonsterListingComponent implements OnInit {
 
 
   @Input() userid: string;
-  monsters: Monster[];
+  @Input() monsters: Monster[];
 
   constructor(
     public monsterService: MonsterService,
@@ -39,8 +40,9 @@ export class MonsterListingComponent implements OnInit {
 
   getList() {
     const list = this.route.snapshot.paramMap.get('list');
-
-    if (this.userid != null) {
+    if (this.monsters != null) {
+      return this.monsters;
+    } else if (this.userid != null) {
       return this.monsterService.userProfileMonsters;
     } else if (list === 'my') {
       return this.monsterService.userMonsters;

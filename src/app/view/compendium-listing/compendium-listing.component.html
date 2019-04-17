@@ -1,0 +1,31 @@
+<div *ngIf="getList() | async as list; else loading">
+  <div *ngIf="list.length; else empty">
+    <div class="row">
+      <ng-container *ngFor="let compendium of list">
+        <div class="listing-item compendium-listing">
+          <div class="col-sm">
+            <div class="row">
+              <div class="col-sm">
+                <a class="stattext titletext name" href="/compendium/{{compendium.id}}">{{compendium.name}} </a>
+                <a href="/profile/{{compendium.userid}}"><i class="fas fa-user-circle"></i></a>
+                <span><i class="fas fa-thumbs-up"></i> {{compendium.upvotes.length}}</span><br>
+                <a *ngIf="isOwner(compendium)" class="vote" href="/compendium/{{compendium.id}}/edit"><i
+                    class="fas fa-edit"></i> Edit</a>
+                <button *ngIf="isOwner(compendium)" class="vote" (click)="delete(compendium)"><i
+                    class="fas fa-trash"></i>
+                  Delete</button>
+                <hr>
+                <p>{{compendium.monsters.length}} monsters available</p>
+              </div>
+            </div>
+            <br>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <ng-template #empty>No compendium available...</ng-template>
+</div>
+<ng-template #loading>
+  Loading...
+</ng-template>

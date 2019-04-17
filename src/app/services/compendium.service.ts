@@ -11,8 +11,8 @@ import { map } from 'rxjs/operators';
 export class CompendiumService {
 
 
-  private CompendiumCollection: AngularFirestoreCollection<Compendium>;
-  Compendiums: Observable<Compendium[]> = new Observable;
+  private compendiumCollection: AngularFirestoreCollection<Compendium>;
+  compendiums: Observable<Compendium[]> = new Observable;
 
   private userCompendiumCollection: AngularFirestoreCollection<Compendium>;
   userCompendiums: Observable<Compendium[]> = new Observable;
@@ -20,8 +20,8 @@ export class CompendiumService {
   constructor(
     private db: AngularFirestore,
     private authService: AuthService) {
-    this.CompendiumCollection = this.db.collection<Compendium>('compendium');
-    this.Compendiums = this.CompendiumCollection.snapshotChanges().pipe(
+    this.compendiumCollection = this.db.collection<Compendium>('compendium');
+    this.compendiums = this.compendiumCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as Compendium;
         const id = a.payload.doc.id;
@@ -46,14 +46,18 @@ export class CompendiumService {
   }
 
   updateCompendium(compendium: Compendium) {
-    this.CompendiumCollection.doc(compendium.id).update(compendium);
+    return this.compendiumCollection.doc(compendium.id).update(compendium);
   }
 
   insertCompendium(compendium: Compendium) {
-    this.CompendiumCollection.add(compendium);
+    return this.compendiumCollection.add(compendium);
+  }
+
+  deleteCompendium(compendium: Compendium) {
+    return this.compendiumCollection.doc(compendium.id).delete();
   }
 
   getCompendium(id: string) {
-    return this.db.doc<Compendium>('Compendium/' + id).valueChanges();
+    return this.db.doc<Compendium>('compendium/' + id).valueChanges();
   }
 }

@@ -11,6 +11,7 @@ import { Statistics } from './Statistics';
 export interface Monster {
     id?: string;
     userid: string;
+    createdOn: Date;
     name: string;
     imageUrl?: string;
     description: string;

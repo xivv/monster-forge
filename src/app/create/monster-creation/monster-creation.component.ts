@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MovementType } from 'src/app/model/MovementType';
 import { Alignment } from 'src/app/model/Alignment';
@@ -24,25 +24,29 @@ import { SavingThrow } from 'src/app/model/SavingThrow';
 import { SenseType } from 'src/app/model/SenseType';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { Subscription } from 'rxjs';
+import { ResizeService } from 'src/app/services/resize.service';
 
 @Component({
   selector: 'app-monster-creation',
   templateUrl: './monster-creation.component.html',
   styleUrls: ['./monster-creation.component.scss']
 })
-export class MonsterCreationComponent implements OnInit {
+export class MonsterCreationComponent implements OnInit, OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
     public authService: AuthService,
-    private monsterService: MonsterService,
+    public monsterService: MonsterService,
     private route: ActivatedRoute,
     private spinnerService: Ng4LoadingSpinnerService,
-    private router: Router
+    private router: Router,
+    private resizeService: ResizeService
   ) { }
 
   /* Wizard Variables */
   private maxAbilities = 20;
+  public maxMonster = 10;
   private maxLanguages = 10;
   isEditMode = false;
   wizardPosition = 0;
@@ -79,8 +83,24 @@ export class MonsterCreationComponent implements OnInit {
 
   /* Misc */
   originalMonster: Monster;
+  private resizeSubscription: Subscription;
+  isMobile: boolean;
+
+  ngOnDestroy() {
+    if (this.resizeSubscription) {
+      this.resizeSubscription.unsubscribe();
+    }
+  }
 
   ngOnInit() {
+
+    this.isMobile = window.screen.width < 1024;
+
+    this.resizeSubscription = this.resizeService.onResize$
+      .subscribe(size => {
+        this.isMobile = size.window.innerWidth < 1024;
+      });
+
     this.form = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
       imageUrl: ['', [Validators.minLength(5), Validators.maxLength(100)]],
@@ -237,6 +257,7 @@ export class MonsterCreationComponent implements OnInit {
     statisticValues.forEach(element => {
       this.form.controls[element].setValue(monster.statistics[element]);
     });
+
     this.spinnerService.hide();
   }
 
@@ -247,6 +268,7 @@ export class MonsterCreationComponent implements OnInit {
       const monster: Monster = {
         userid: this.authService.getUserId(),
         name: this.form.controls.name.value,
+        createdOn: new Date(),
         description: this.form.controls.description.value,
         imageUrl: this.form.controls.imageUrl.value,
         cr: this.form.controls.cr.value,

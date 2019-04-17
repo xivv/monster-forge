@@ -1,4 +1,6 @@
-<app-navbar></app-navbar>
-<router-outlet></router-outlet>
-<app-footer></app-footer>
-<ng4-loading-spinner> </ng4-loading-spinner>
+<div class="viewport">
+  <app-navbar></app-navbar>
+  <router-outlet></router-outlet>
+  <app-footer></app-footer>
+  <ng4-loading-spinner [loadingText]="'Please wait...'"> </ng4-loading-spinner>
+</div>

@@ -1,14 +1,14 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable, OnInit, OnDestroy } from '@angular/core';
 import { Monster } from '../model/Monster';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, ObservableLike } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
-import { map } from 'rxjs/operators';
+import { map, concat } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MonsterService implements OnInit {
+export class MonsterService implements OnInit, OnDestroy {
 
   private monsterCollection: AngularFirestoreCollection<Monster>;
   monsters: Observable<Monster[]> = new Observable;
@@ -75,11 +75,31 @@ export class MonsterService implements OnInit {
     return this.db.doc<Monster>('monster/' + id).valueChanges();
   }
 
+  getAllMonster(ids: String[]): Monster[] {
+
+    const result: Monster[] = [];
+
+    ids.forEach(element => {
+      this.db.doc<Monster>('monster/' + element).valueChanges().subscribe(
+        val => {
+          if (val) {
+            result.push(val);
+          }
+        }
+      );
+    });
+
+    return result;
+  }
+
   deleteMonster(monster: Monster) {
     this.monsterCollection.doc(monster.id).delete();
   }
 
   ngOnInit() {
 
+  }
+
+  ngOnDestroy() {
   }
 }

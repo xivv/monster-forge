@@ -1,21 +1,80 @@
+.viewport {
+  background-image: url(assets/bg.jpg);
+  background-repeat: repeat-y;
+  background-color: rgba(41, 49, 51, 1);
+  height: 100%;
+  left: 0;
+  right: 0;
+  position: absolute;
+}
+
+.wizardtitle {
+  font-weight: bold;
+  color: white !important;
+  background-color: rgba(0, 0, 0, .7);
+}
+
+.compendium-monster {
+  color: white !important;
+  background-color: rgba(0, 0, 0, .7);
+}
+
+.monster-listing,
+.compendium-listing {
+  background-color: #0b0f14;
+  border: 1px solid black;
+  width: 20%;
+  height: 200px;
+  color: white;
+  margin: 10px;
+  padding: 15px;
+  box-shadow: 0px 0px 0px 2px grey inset;
+}
+
 .name:first-child:first-letter {
   font-size: 25px;
 }
 
 .name {
   font-size: 20px;
+  color: white !important;
 }
 
 .stattext {
-  color: #800000;
+  color: black;
 }
 
 .vote {
-  background-color: #800000;
   color: white;
   border: none;
   padding: 5px;
+  background-color: #10161e;
+  border: 1px solid black;
+  box-shadow: 0px 0px 0px 2px grey inset;
 }
+
+@keyframes example {
+  from {
+    border: 1px solid gold;
+  }
+
+  to {
+    border: 1px solid rgb(255, 245, 189);
+  }
+}
+
+.vote:hover {
+  box-shadow: inset -1px -19px 42px -23px rgba(0, 0, 0, 0.2);
+  border: 1px solid gold;
+  transition: border .3s ease-in;
+  animation-name: example;
+  animation-duration: 1s;
+  color: white;
+  animation-iteration-count: infinite;
+}
+
+
+
 
 .vote:disabled {
   background-color: grey;
@@ -63,8 +122,9 @@
   background-color: rgb(239, 226, 190);
 }
 
+
 .infotext {
-  color: #000000;
+  color: black;
   font-style: italic;
   font-size: 12px;
 }
@@ -79,8 +139,8 @@
 }
 
 hr {
-  background-color: #800000;
-  height: 5px;
+  background-color: rgb(247, 247, 247);
+  height: 3px;
 }
 
 .description-divider {
@@ -123,8 +183,4 @@ hr {
 
 .ng-invalid:not(form) {
   border: 3px solid #800000;
-}
-
-.listing-item {
-  margin-bottom: 10px;
 }

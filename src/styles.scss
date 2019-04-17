@@ -1,12 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "~bootstrap/scss/bootstrap";
-@import "./dnd.scss";
+@import "./dndv2.scss";
+
 @font-face {
-    font-family: dndstandard;
-    src: url(./assets/standard.otf);
+  font-family: dndstandard;
+  src: url(./assets/standard.otf);
 }
 
 div {
-    font-family: dndstandard;
+  font-family: dndstandard;
 }

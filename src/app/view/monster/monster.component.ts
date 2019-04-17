@@ -95,6 +95,13 @@ export class MonsterComponent implements OnInit {
     this.monsterService.updateMonster(this.monster);
   }
 
+  alreadyVoted() {
+    const userid = this.authService.getUserId();
+    return this.monster.upvotes.find(function (element) {
+      return element === userid;
+    });
+  }
+
   isOwner(monster: Monster) {
     return this.authService.getUserId() === monster.userid;
   }
@@ -103,10 +110,5 @@ export class MonsterComponent implements OnInit {
     this.monsterService.deleteMonster(monster);
   }
 
-  alreadyVoted() {
-    const userid = this.authService.getUserId();
-    return this.monster.upvotes.find(function (element) {
-      return element === userid;
-    });
-  }
+
 }

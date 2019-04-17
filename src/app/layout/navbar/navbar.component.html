@@ -1,26 +1,53 @@
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg">
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
-    aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler custom-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle nav-link-top" href="#" id="navbarDropdown" role="button"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Monster
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="nav-link nav-link-bottom" href="/listing/monster/all">{{(monsterService.monsters | async )?.length}}
+            Monster
+            Available</a>
+          <a *ngIf="(authService.user | async);" class="nav-link nav-link-bottom" href="/listing/monster/my">My
+            Monsters</a>
+          <a *ngIf="(authService.user | async);" class="nav-link nav-link-bottom" href="/create/monster">Create
+            Monster</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle nav-link-top" href="#" id="navbarDropdown" role="button"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Compendium
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="nav-link nav-link-bottom"
+            href="/listing/compendium/all">{{(compendiumService.compendiums | async )?.length}}
+            Compendiums
+            Available</a>
+          <a *ngIf="(authService.user | async);" class="nav-link nav-link-bottom" href="/create/compendium">Create
+            Compendium</a>
+          <a *ngIf="(authService.user | async);" class="nav-link nav-link-bottom" href="/listing/compendium/my">My
+            Compendiums</a>
+        </div>
+      </li>
+    </ul>
     <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="/listing/all">Monsters</a>
-      </li>
       <li *ngIf="(authService.user | async);" class="nav-item">
-        <a class="nav-link" href="/listing/my">My Monsters</a>
-      </li>
-      <li *ngIf="(authService.user | async);" class="nav-item">
-        <a class="nav-link" href="/create">Create Monster</a>
+        <a class="nav-link" href="/profile/{{authService.getUserId()}}">Profile</a>
       </li>
       <li *ngIf="!(authService.user | async);" class="nav-item">
-        <a class="nav-link" routerLink="/register">Register</a>
+        <a class="nav-link" href="/register">Register</a>
       </li>
       <li *ngIf="!(authService.user | async);" class="nav-item">
-        <a class="nav-link" routerLink="/login">Login</a>
+        <a class="nav-link" href="/login">Login</a>
       </li>
       <li *ngIf="(authService.user | async);" class="nav-item">
         <a class="nav-link" (click)="logout()">Logout</a>
